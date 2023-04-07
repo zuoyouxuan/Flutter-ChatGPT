@@ -1,5 +1,8 @@
 /// Base ChatGPT Url
-const kURL = "https://api.openai.com/v1/";
+// const kURL = "https://api.openai.com/v1/";
+
+const kURL = "https://chat.appint.xyz/v1/";
+
 
 const kCompletion = 'completions';
 
