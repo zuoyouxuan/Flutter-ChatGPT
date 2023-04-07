@@ -171,7 +171,6 @@ class OpenAIClient extends OpenAIWrapper {
     try {
       _dio
           .post(url,
-              cancelToken: cancelToken,
               data: json.encode(request),
               options: Options(responseType: ResponseType.stream))
           .then((it) {
