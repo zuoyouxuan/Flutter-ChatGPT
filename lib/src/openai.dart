@@ -29,7 +29,9 @@ abstract class IOpenAI {
   listEngine();
   Future<CTResponse?> onCompletion({required CompleteText request});
   Stream<CTResponse> onCompletionSSE({required CompleteText request});
-  void onChatCompletionCompleteSSE({required ChatCompleteText request , required Function(Stream<List<int>> value) complete});
+  void onChatCompletionCompleteSSE(
+      {required ChatCompleteText request,
+        required Function(Stream<List<int>> value) complete});
   Future<ChatCTResponse?> onChatCompletion({
     required ChatCompleteText request,
   });

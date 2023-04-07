@@ -143,24 +143,47 @@ class OpenAIClient extends OpenAIWrapper {
         .post(url, data: json.encode(request), cancelToken: cancelToken)
         .asStream();
   }
-
-  void sseWithComplete(
-      String url, CancelToken cancelToken, Map<String, dynamic> request,
+  //
+  // void sseWithComplete(
+  //     String url, CancelToken cancelToken, Map<String, dynamic> request,
+  //     {required Function(Stream<List<int>> value) complete}) {
+  //   log.debugString("request body :$request");
+  //   try {
+  //     _dio
+  //         .post(url,
+  //             cancelToken: cancelToken,
+  //             data: json.encode(request),
+  //             options: Options(responseType: ResponseType.stream))
+  //         .then((it) {
+  //       complete(it.data.stream);
+  //     }).onError((error, stackTrace) {
+  //       complete(Stream.error(error.toString()));
+  //     });
+  //   } catch (err) {
+  //     complete(Stream.error(err.toString()));
+  //   }
+  // }
+  void sseWithComplete(String url, CancelToken cancelToken, Map<String, dynamic> request,
       {required Function(Stream<List<int>> value) complete}) {
     log.debugString("request body :$request");
     try {
       _dio
           .post(url,
-              cancelToken: cancelToken,
-              data: json.encode(request),
-              options: Options(responseType: ResponseType.stream))
+          cancelToken: cancelToken,
+          data: json.encode(request),
+          options: Options(responseType: ResponseType.stream))
           .then((it) {
         complete(it.data.stream);
       }).onError((error, stackTrace) {
         complete(Stream.error(error.toString()));
+        print('Caught exception: $error');
+        print('Stack trace:\n$stackTrace');
+        // throw RequestError(message: "${error.toString()}");
       });
     } catch (err) {
       complete(Stream.error(err.toString()));
+      print('Caught exception: $err');
+      // throw RequestError(message: err.toString());
     }
   }
 
