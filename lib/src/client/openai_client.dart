@@ -144,6 +144,26 @@ class OpenAIClient extends OpenAIWrapper {
         .asStream();
   }
 
+  void sseWithComplete(
+      String url, CancelToken cancelToken, Map<String, dynamic> request,
+      {required Function(Stream<List<int>> value) complete}) {
+    log.debugString("request body :$request");
+    try {
+      _dio
+          .post(url,
+              cancelToken: cancelToken,
+              data: json.encode(request),
+              options: Options(responseType: ResponseType.stream))
+          .then((it) {
+        complete(it.data.stream);
+      }).onError((error, stackTrace) {
+        complete(Stream.error(error.toString()));
+      });
+    } catch (err) {
+      complete(Stream.error(err.toString()));
+    }
+  }
+
   Stream<T> sse<T>(
       String url, CancelToken cancelToken, Map<String, dynamic> request,
       {required T Function(Map<String, dynamic> value) complete}) {
@@ -170,6 +190,7 @@ class OpenAIClient extends OpenAIWrapper {
               log.log("stream response is done");
               return;
             }
+            print(mData);
 
             ///decode data
             controller

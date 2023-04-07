@@ -29,6 +29,7 @@ abstract class IOpenAI {
   listEngine();
   Future<CTResponse?> onCompletion({required CompleteText request});
   Stream<CTResponse> onCompletionSSE({required CompleteText request});
+  void onChatCompletionCompleteSSE({required CompleteText request , required Function(Stream<List<int>> value) complete});
   Future<ChatCTResponse?> onChatCompletion({
     required ChatCompleteText request,
   });
@@ -161,12 +162,23 @@ class OpenAI implements IOpenAI {
   /// - look more
   /// https://beta.openai.com/examples .[onChatCompletion]
   @override
+  void onChatCompletionCompleteSSE(
+      {required CompleteText request,
+        required Function(Stream<List<int>> value) complete}) {
+     _client.sseWithComplete(
+        "$kURL$kChatGptTurbo" , _cancel, request.toJson()..addAll({"stream": true}),
+        complete: (it) => complete(it));
+  }
+
+
+  @override
   Stream<CTResponse> onCompletionSSE({required CompleteText request}) {
     return _client.sse('$kURL$kCompletion', _cancel,
         request.toJson()..addAll({"stream": true}), complete: (it) {
       return CTResponse.fromJson(it);
     });
   }
+
 
   @override
   void cancelAIGenerate() {
