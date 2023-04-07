@@ -117,7 +117,7 @@ class OpenAIClient extends OpenAIWrapper {
       log.log("request body :$request");
 
       final rawData = await _dio.post(url,
-          data: json.encode(request), cancelToken: cancelToken);
+          data: json.encode(request));
       if (rawData.statusCode == HttpStatus.ok) {
         log.log("============= success ==================");
         return onSuccess(rawData.data);
