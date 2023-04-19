@@ -157,13 +157,13 @@ class OpenAIClient extends OpenAIWrapper {
         complete(it.data.stream);
       }).onError((error, stackTrace) {
         complete(Stream.error(error.toString()));
-        print('Caught exception: $error');
-        print('Stack trace:\n$stackTrace');
+        log.error(error , stackTrace);
+        // log.error('Stack trace:\n$stackTrace');
         // throw RequestError(message: "${error.toString()}");
       });
     } catch (err) {
       complete(Stream.error(err.toString()));
-      print('Caught exception: $err');
+      log.log('Caught exception: $err');
       // throw RequestError(message: err.toString());
     }
   }
