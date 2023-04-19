@@ -194,7 +194,7 @@ class OpenAIClient extends OpenAIWrapper {
               log.log("stream response is done");
               return;
             }
-            print(mData);
+            // print(mData);
 
             ///decode data
             controller
